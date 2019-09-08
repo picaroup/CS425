@@ -36,6 +36,24 @@ func request(ipAddr string, args []string) {
 	}
 }
 
+func read_ips() []string{
+	file, err := os.Open("ips.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	ipAddr := []string{}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		//fmt.Println(scanner.Text())
+		ipAddr = append(ipAddr, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return ipAddr
+}
+
 func main() {
 	if len(os.Args) <= 2 {
 		fmt.Print("Usage: go run client.go grep [options] pattern\n")
@@ -43,12 +61,13 @@ func main() {
 	}
 	args := os.Args[2:]
 
-	var ips [1]string
-	ips[0] = "172.22.154.42"
-
-	wg.Add(len(ips))
-	for i := range ips {
-		go request(ips[i], args)
+	// var ips [1]string
+	// ips[0] = "172.22.154.42"
+	ipAddr := read_ips()
+	fmt.Print(ipAddr)
+	wg.Add(len(ipAddr))
+	for i := range ipAddr {
+		go request(ipAddr[i], args)
 	}
 	wg.Wait()
 }
