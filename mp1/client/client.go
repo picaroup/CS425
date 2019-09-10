@@ -43,8 +43,9 @@ func request(ipAddr string, args []string) {
 func read_ips() []string{
 	file, err := os.Open("ips.txt")
 	if err != nil {
-		//log.Fatal(err)
+		
 		fmt.Print("Can not open ip addresses file")
+		log.Fatal(err)
 	}
 	defer file.Close()
 	ipAddr := []string{}
