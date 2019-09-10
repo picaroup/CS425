@@ -18,7 +18,7 @@ func request(ipAddr string, args []string) {
 	conn, err := net.Dial("tcp", ipAddr+":8080")
 	if err != nil {
 		// log.Fatal(err)
-		fmt.Print("fail to connect with IP:", ipAddr)
+		fmt.Print("fail to connect with IP:", ipAddr, "\n")
 		return 
 	}
 	fmt.Printf("connected to %s\n", conn.RemoteAddr().String())
@@ -27,7 +27,7 @@ func request(ipAddr string, args []string) {
 	machineName, err := reader.ReadString('\n')
 	if err != nil {
 		// log.Fatal(err)
-		fmt.Print("fail to receive data from IP:", ipAddr)
+		fmt.Print("fail to receive data from IP:", ipAddr, "\n")
 		return 
 	}
 	machineName = strings.TrimSuffix(machineName, "\n")
@@ -44,7 +44,7 @@ func read_ips() []string{
 	file, err := os.Open("ips.txt")
 	if err != nil {
 		
-		fmt.Print("Can not open ip addresses file")
+		fmt.Print("Can not open ip addresses file\n")
 		log.Fatal(err)
 	}
 	defer file.Close()
@@ -55,7 +55,7 @@ func read_ips() []string{
 		ipAddr = append(ipAddr, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
-		fmt.Print("Can not read ip addresses")
+		fmt.Print("Can not read ip addresses\n")
 	}
 	return ipAddr
 }
