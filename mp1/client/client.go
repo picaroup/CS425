@@ -17,14 +17,18 @@ func request(ipAddr string, args []string) {
 	pattern := strings.Join(args, " ")
 	conn, err := net.Dial("tcp", ipAddr+":8080")
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
+		fmt.Print("fail to connect with IP:", ipAddr)
+		return 
 	}
 	fmt.Printf("connected to %s\n", conn.RemoteAddr().String())
 	fmt.Fprintf(conn, pattern+"\n")
 	reader := bufio.NewReader(conn)
 	machineName, err := reader.ReadString('\n')
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
+		fmt.Print("fail to receive data from IP:", ipAddr)
+		return 
 	}
 	machineName = strings.TrimSuffix(machineName, "\n")
 	for {
@@ -39,7 +43,8 @@ func request(ipAddr string, args []string) {
 func read_ips() []string{
 	file, err := os.Open("ips.txt")
 	if err != nil {
-		log.Fatal(err)
+		//log.Fatal(err)
+		fmt.Print("Can not open ip addresses file")
 	}
 	defer file.Close()
 	ipAddr := []string{}
@@ -49,7 +54,7 @@ func read_ips() []string{
 		ipAddr = append(ipAddr, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		fmt.Print("Can not read ip addresses")
 	}
 	return ipAddr
 }
